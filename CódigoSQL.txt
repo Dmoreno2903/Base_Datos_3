@@ -1,0 +1,103 @@
+/* -------------------------------------- */
+CREATE TABLE bodega(
+    direccion VARCHAR(50) PRIMARY KEY,
+    capacidad NUMBER(4) CHECK(capacidad >= 0)
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE proovedor(
+    nit NUMBER(10) PRIMARY KEY,
+    nombre VARCHAR(30) UNIQUE-,
+    direccion VARCHAR(50) NOT NULL,
+    contacto NUMBER(10) NOT NULL
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE pedido(
+    numero_factura NUMBER(10) PRIMARY KEY,
+    valor NUMBER(20) NOT NULL,
+    fecha_compra DATE NOT NULL,
+    fecha_entrega DATE NOT NULL,
+    estado VARCHAR(10) CHECK(estado in ("Entregado", "En proceso")),
+    proovedor NUMBER(10) NOT NULL REFERENCES proovedor,
+    administrador NUMBER(10) NOT NULL REFERENCES administrador
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE empleado(
+    cedula NUMBER(10) PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    numero_contacto VARCHAR(10) NOT NULL,
+    salario NUMBER(7),
+    estado VARCHAR(8) CHECK(estado in ("Activo", "Inactivo")),
+    correo_electronico VARCHAR(20)
+);
+
+CREATE TABLE administrador(
+    empleado NUMBER(10) NOT NULL REFERENCES empleado,
+    supervisor NUMBER(10) NOT NULL REFERENCES empleado
+);
+CREATE TABLE mecanico(
+    empleado NUMBER(10) NOT NULL REFERENCES empleado,
+    certificado_sena VARCHAR(2) CHECK(certificado_sena in ("Si", "No"))
+);
+CREATE TABLE cajero(
+    empleado NUMBER(10) NOT NULL REFERENCES empleado,
+    comision_venta NUMBER(7) NOT NULL
+);
+CREATE TABLE asesor(
+    empleado NUMBER(10) NOT NULL REFERENCES empleado
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE vehiculo(
+    numero_chasis NUMBER(20) PRIMARY KEY,
+    placa VARCHAR(6),
+    marca VARCHAR(20) NOT NULL,
+    modelo VARCHAR(20) NOT NULL,
+    cilindraje NUMBER(4) NOT NULL,
+    color VARCHAR(10) NOT NULL,
+    kilometraje NUMBER(10) NOT NULL,
+    bodega VARCHAR(50) NOT NULL REFERENCES bodega,
+    vehiculo_reparacion NUMBER(20) REFERENCES vehiculo,
+    pedido NUMBER(10) REFERENCES pedido
+);
+CREATE TABLE carro(
+    numero_puerta NUMBER(1) NOT NULL,
+    vehiculo NUMBER(20) NOT NULL REFERENCES vehiculo
+);CREATE TABLE moto(
+    vehiculo NUMBER(20) NOT NULL REFERENCES vehiculo
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE peritaje(
+    codigo NUMBER(5) PRIMARY KEY,
+    fecha DATE NOT NULL,
+    estado VARCHAR(21) CHECK(estado in ("Aprobado", "No aprobado", "Parcialmente aprobado")),
+    vehiculo NUMBER(20) NOT NULL REFERENCES vehiculo,
+    mecanico NUMBER(10) NOT NULL REFERENCES mecanico
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE persona_natural(
+    cedula NUMBER(10) PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL,
+    numero_contacto VARCHAR(10) NOT NULL,
+    ocupacion VARCHAR(20)
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE persona_juridica(
+    nit NUMBER(10) PRIMARY KEY,
+    correo_electronico VARCHAR(20) NOT NULL,
+    razon_social VARCHAR(30) UNIQUE
+);
+/* -------------------------------------- */
