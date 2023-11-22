@@ -8,7 +8,7 @@ CREATE TABLE bodega(
 /* -------------------------------------- */
 CREATE TABLE proovedor(
     nit NUMBER(10) PRIMARY KEY,
-    nombre VARCHAR(30) UNIQUE-,
+    nombre VARCHAR(30) UNIQUE,
     direccion VARCHAR(50) NOT NULL,
     contacto NUMBER(10) NOT NULL
 );
@@ -99,5 +99,27 @@ CREATE TABLE persona_juridica(
     nit NUMBER(10) PRIMARY KEY,
     correo_electronico VARCHAR(20) NOT NULL,
     razon_social VARCHAR(30) UNIQUE
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE transaccion(
+    codigo NUMBER(10) PRIMARY KEY,
+    fecha DATE NOT NULL,
+    valor NUMBER(10) NOT NULL,
+    metodo_pago VARCHAR(7) CHECK(metodo_pago in ("PSE", "Efectivo", "Tarjeta")),
+    cajero NUMBER(10) NOT NULL REFERENCES cajero,
+    /* Preguntar a pacho */
+    comprador NUMBER(10) REFERENCES cliente,
+    vendedor NUMBER(10) REFERENCES cliente
+);
+/* -------------------------------------- */
+
+/* -------------------------------------- */
+CREATE TABLE cliente(
+    codigo NUMBER(10) PRIMARY KEY,
+    fecha_transaccion DATE NOT NULL,
+    salario NUMBER(10) NOT NULL,
+    asesor NUMBER(10) NOT NULL REFERENCES asesor
 );
 /* -------------------------------------- */
