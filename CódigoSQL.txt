@@ -6,22 +6,23 @@ CREATE TABLE bodega(
 /* -------------------------------------- */
 
 /* -------------------------------------- */
-CREATE TABLE proovedor(
-    nit NUMBER(10) PRIMARY KEY,
-    nombre VARCHAR(30) UNIQUE,
-    direccion VARCHAR(50) NOT NULL,
-    contacto NUMBER(10) NOT NULL
+CREATE TABLE proveedor(
+    nit VARCHAR(10) PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL UNIQUE,
+    contacto VARCHAR(10) NOT NULL,
+  	patrimonio NUMBER(10) NOT NULL
 );
 /* -------------------------------------- */
 
 /* -------------------------------------- */
 CREATE TABLE pedido(
-    numero_factura NUMBER(10) PRIMARY KEY,
-    valor NUMBER(20) NOT NULL,
+    codigo NUMBER(10) PRIMARY KEY,
+    valor NUMBER(20) NOT NULL CHECK(valor >= 0),
     fecha_compra DATE NOT NULL,
-    fecha_entrega DATE NOT NULL,
+    fecha_entrega DATE NOT NULL CHECK(fecha_compra <= fecha_entrega),
     estado VARCHAR(10) CHECK(estado in ("Entregado", "En proceso")),
-    proovedor NUMBER(10) NOT NULL REFERENCES proovedor,
+    proveedor VARCHAR(10) REFERENCES proveedor,
+  	verificador NUMBER(10) REFERENCES proveedor CHECK(verificador != proveedor) UNIQUE,
     administrador NUMBER(10) NOT NULL REFERENCES administrador
 );
 /* -------------------------------------- */
@@ -34,23 +35,26 @@ CREATE TABLE empleado(
     numero_contacto VARCHAR(10) NOT NULL,
     salario NUMBER(7),
     estado VARCHAR(8) CHECK(estado in ("Activo", "Inactivo")),
-    correo_electronico VARCHAR(20)
+    correo_electronico VARCHAR(20),
+  	tipo VARCHAR(8) NOT NULL CHECK(tipo IN ("admin", "mecanico", "cajero", "asesor")),
+  
+  	/* Preguntar sobre exclusividad*/
+  	supervisor NUMBER(10) REFERENCES administrador
 );
 
 CREATE TABLE administrador(
-    empleado NUMBER(10) NOT NULL REFERENCES empleado,
-    supervisor NUMBER(10) NOT NULL REFERENCES empleado
+    cedula_administrador NUMBER(10) NOT NULL REFERENCES empleado
 );
 CREATE TABLE mecanico(
-    empleado NUMBER(10) NOT NULL REFERENCES empleado,
+    cedula_mecanico NUMBER(10) NOT NULL REFERENCES empleado,
     certificado_sena VARCHAR(2) CHECK(certificado_sena in ("Si", "No"))
 );
 CREATE TABLE cajero(
-    empleado NUMBER(10) NOT NULL REFERENCES empleado,
+    cedula_cajero NUMBER(10) NOT NULL REFERENCES empleado,
     comision_venta NUMBER(7) NOT NULL
 );
 CREATE TABLE asesor(
-    empleado NUMBER(10) NOT NULL REFERENCES empleado
+    cedula_asesor NUMBER(10) NOT NULL REFERENCES empleado
 );
 /* -------------------------------------- */
 
@@ -65,13 +69,15 @@ CREATE TABLE vehiculo(
     kilometraje NUMBER(10) NOT NULL,
     bodega VARCHAR(50) NOT NULL REFERENCES bodega,
     vehiculo_reparacion NUMBER(20) REFERENCES vehiculo,
-    pedido NUMBER(10) REFERENCES pedido
+    pedido NUMBER(10) REFERENCES pedido,
+  	tipo VARCHAR(5) NOT NULL CHECK(tipo = "Carro" OR tipo = "Moto"),
+  	reparado_de NUMBER(20) REFERENCES vehiculo
 );
 CREATE TABLE carro(
     numero_puerta NUMBER(1) NOT NULL,
-    vehiculo NUMBER(20) NOT NULL REFERENCES vehiculo
+    chasis_carro NUMBER(20) NOT NULL REFERENCES vehiculo
 );CREATE TABLE moto(
-    vehiculo NUMBER(20) NOT NULL REFERENCES vehiculo
+    chasis_moto NUMBER(20) NOT NULL REFERENCES vehiculo
 );
 /* -------------------------------------- */
 
@@ -98,7 +104,7 @@ CREATE TABLE persona_natural(
 CREATE TABLE persona_juridica(
     nit NUMBER(10) PRIMARY KEY,
     correo_electronico VARCHAR(20) NOT NULL,
-    razon_social VARCHAR(30) UNIQUE
+    razon_social VARCHAR(30) NOT NULL UNIQUE
 );
 /* -------------------------------------- */
 
@@ -107,11 +113,29 @@ CREATE TABLE transaccion(
     codigo NUMBER(10) PRIMARY KEY,
     fecha DATE NOT NULL,
     valor NUMBER(10) NOT NULL,
-    metodo_pago VARCHAR(7) CHECK(metodo_pago in ("PSE", "Efectivo", "Tarjeta")),
+    tipo VARCHAR(7) CHECK(tipo in ("PSE", "Efectivo", "Tarjeta")),
     cajero NUMBER(10) NOT NULL REFERENCES cajero,
-    /* Preguntar a pacho */
+  
+  	/* Preguntar sobre exclusividad */
     comprador NUMBER(10) REFERENCES cliente,
-    vendedor NUMBER(10) REFERENCES cliente
+    vendedor NUMBER(10) REFERENCES cliente,
+  	vehiculo NUMBER(10) NOT NULL REFERENCES vehiculo
+);
+CREATE TABLE pse(
+  	codigo_pse NUMBER(10) NOT NULL REFERENCES transaccion,
+  	cedula VARCHAR(10) NOT NULL,
+  	correo_electronico VARCHAR(30) NOT NULL,
+  	tipo_persona VARCHAR(8) NOT NULL CHECK(tipo_persona in ("Natural", "Juridica"))
+);
+CREATE TABLE efectivo(
+  	codigo_efectivo NUMBER(10) NOT NULL REFERENCES transaccion,
+	descuento NUMBER(3) NOT NULL
+);
+CREATE TABLE tarjeta(
+  	codigo_tarjeta NUMBER(10) NOT NULL REFERENCES transaccion,
+	numero_tarjeta VARCHAR(16) NOT NULL,
+  	comision NUMBER(3) NOT NULL,
+  	fecha_vencimiento DATE NOT NULL
 );
 /* -------------------------------------- */
 
@@ -119,7 +143,11 @@ CREATE TABLE transaccion(
 CREATE TABLE cliente(
     codigo NUMBER(10) PRIMARY KEY,
     fecha_transaccion DATE NOT NULL,
-    salario NUMBER(10) NOT NULL,
-    asesor NUMBER(10) NOT NULL REFERENCES asesor
+    asesor NUMBER(10) NOT NULL REFERENCES asesor,
+  	persona_natural NUMBER(10) REFERENCES persona_natural,
+  	persona_juridica NUMBER(10) REFERENCES persona_juridica,
+  	CHECK((persona_natural IS NULL AND persona_juridica IS NOT NULL) 
+          OR 
+          (persona_natural IS not NULL AND persona_juridica IS NULL))
 );
 /* -------------------------------------- */
