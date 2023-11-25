@@ -13,7 +13,7 @@
 </head>
 <body>
     
-    <footer class="bg-primary py-3" style="position: fixed; bottom: 0;width: 100%;margin-botton:10px">
+    <footer class="bg-primary py-3" style="bottom: 0;width: 100%;margin-botton:10px">
     <div class="container text-center">
         <p class="text-white mb-0"> 2023 Universidad Nacional de Colombia sede Medellín</p>
     </div>
