@@ -24,7 +24,7 @@
 
     <div class="informacion">
             <ul>
-                <li><b class="text-primary">Materia:</b> B  ases de Datos I</li>
+                <li><b class="text-primary">Materia:</b> Bases de Datos I</li>
                 <li><b class="text-primary">Profesor:</b> Francisco Javier Moreno Arboleda</li>
                 <li><b class="text-primary">Institución:</b> Universidad Nacional de Colombia sede Medellín</li>
                 <li><b class="text-primary">Semestre:</b> 2023-2</li>
@@ -42,7 +42,7 @@
 
         <div class="modelo">
             <h2 class="text-primary">Modelo E-R</h2>
-            <img src="entidadrelacion.png" class="img-fluid rounded">
+            <img src="Modelo_E-R.png" class="img-fluid rounded">
         </div>
         <div class="btn-group">
             <a href="proveedor/proveedor.php" style="margin-right:1px;margin-left:1px" class="btn btn-primary col-md-4">Entidad análoga a CLIENTE (PROVEEDOR)</a>

@@ -55,7 +55,7 @@ if($resultadoProveedor and $resultadoProveedor->num_rows > 0):
                 <th scope="col" class="text-center">NIT</th>
                 <th scope="col" class="text-center">Nombre</th>
                 <th scope="col" class="text-center">Contacto</th>
-                <th scope="col" class="text-center">Número de vehiculos</th>
+                <th scope="col" class="text-center">Patrominio</th>
             </tr>
         </thead>
 
@@ -72,7 +72,7 @@ if($resultadoProveedor and $resultadoProveedor->num_rows > 0):
                 <td class="text-center"><?= $fila["nit"]; ?></td>
                 <td class="text-center"><?= $fila["nombre"]; ?></td>
                 <td class="text-center"><?= $fila["contacto"]; ?></td>
-                <td class="text-center"><?= $fila["numero_vehiculos"]; ?></td>
+                <td class="text-center"><?= $fila["patrimonio"]; ?></td>
                 
                 <!-- Botón de eliminar. Debe de incluir la CP de la entidad para identificarla -->
                 <td class="text-center">

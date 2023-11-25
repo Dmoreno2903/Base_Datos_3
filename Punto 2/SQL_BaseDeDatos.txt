@@ -1,0 +1,20 @@
+CREATE TABLE proveedor (
+  nit VARCHAR(10) PRIMARY KEY,
+  nombre VARCHAR(30) NOT NULL UNIQUE,
+  contacto VARCHAR(10) NOT NULL,
+  patrimonio INTEGER(10) NOT NULL
+);
+
+CREATE TABLE pedido (
+  codigo INT(10) PRIMARY KEY AUTO_INCREMENT,
+  valor INTEGER(20) NOT NULL CHECK(valor >= 0),
+  fecha_compra DATE NOT NULL,
+  fecha_entrega DATE NOT NULL,
+  estado VARCHAR(10) NOT NULL CHECK(estado IN ('Entregado', 'En proceso')),
+  proveedor_nit VARCHAR(10),
+  verificador_nit VARCHAR(10),
+  CONSTRAINT fk_proveedor FOREIGN KEY (proveedor_nit) REFERENCES proveedor(nit),
+  CONSTRAINT fk_verificador FOREIGN KEY (verificador_nit) REFERENCES proveedor(nit),
+  CONSTRAINT ck_exclusividad CHECK (verificador_nit != proveedor_nit),
+  CONSTRAINT ck_dates CHECK (fecha_entrega > fecha_compra)
+)AUTO_INCREMENT=1;

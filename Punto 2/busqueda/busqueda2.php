@@ -7,7 +7,7 @@ include "../includes/header.php";
     <h1 class="mt-3">Búsqueda 2</h1>
     
     <p class="mt-3">
-        Dos fechas f1 y f2 (cada fecha con día, mes y año), f2 >= f1 y un estaado. 
+        Dos fechas f1 y f2 (cada fecha con día, mes y año), f2 >= f1 y un estado. 
         Se debe mostrar todos los datos de los pedidos que tienen fecha de
         compra entre f1 (inclusive) y f2 (inclusive), que su estado sea el ingresado, que
         tienen proveedor y que están siendo verificados por proveedor.

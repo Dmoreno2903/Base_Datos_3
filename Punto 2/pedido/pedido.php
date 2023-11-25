@@ -19,9 +19,9 @@ include "../includes/header.php";
             <label for="fecha_compra" class="form-label">Fecha de compra</label>
             <input type="date" class="form-control" id="fecha_compra" name="fecha_compra" required>
         </div>
-
+        
         <div class="mb-3">
-            <label for="fecha_entrega" class="form-label">Fecha de entrega</label>
+            <label for="fecha_entrega" class="form-label">Fecha de entrega (Mayor o igual a la fecha de compra)</label>
             <input type="date" class="form-control" id="fecha_entrega" name="fecha_entrega" required>
         </div>
 
@@ -50,9 +50,9 @@ include "../includes/header.php";
                 <?php endforeach; ?>
             </select>
         </div>
-
+        
         <div class="mb-3">
-            <label for="verificador_nit" class="form-label">Verificador</label>
+            <label for="verificador_nit" class="form-label">Verificador (Distinto del proveedor)</label>
             <select class="form-control" id="verificador_nit" name="verificador_nit">
                 <option value="">Seleccione un proveedor</option>
                 <?php foreach ($resultadoProveedor as $proveedor) : ?>
